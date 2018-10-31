@@ -14,3 +14,14 @@ command completes. `--sound` is optional. By default, the chime.mp3 file
 included in this package will play instead. If `--sound` is not found,
 `chimer` will print a warning and continue normally, but no sound will play
 when the command is done.
+
+## Issues
+
+Note that this may not work as expected with pipes. For example
+
+```
+chimer command | grep result
+```
+
+will chime after `command` completes but before `grep` starts. It also will
+not run `grep` until the sound finishes playing.
