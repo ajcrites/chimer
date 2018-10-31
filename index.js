@@ -1,24 +1,35 @@
+#!/usr/bin/env node
+
 const { fork, spawn } = require('child_process');
 const { existsSync } = require('fs');
 const minimist = require('minimist');
 
-const config = minimist(process.argv.slice(2));
+let argv = process.argv;
 
-if (process.argv.length <= 2) {
+const config = minimist(argv.slice(2));
+
+if (argv.length <= 2) {
   throw new Error('No command specified to chime for.');
 }
 
-const soundFile = config.sound || __dirname + '/chime.mp3';
+let soundFile = __dirname + '/chime.mp3';
+if (config.sound) {
+  soundFile = config.sound;
+  argv.splice(argv.indexOf('--sound'), 2);
+}
+const soundFileExists = existsSync(soundFile);
 
-if (!existsSync(soundFile)) {
-  console.warn('Could not locate the specified sound file. Will exit "silently"');
+if (!soundFileExists) {
+  console.warn('Could not locate the specified sound file. Will exit *silently*.');
 }
 
-spawn(process.argv[2], process.argv.slice(3, process.argv.length), {
+spawn(argv[2], argv.slice(3, argv.length), {
   stdio: 'inherit',
 }).on('exit', val => {
-  const forked = fork(__dirname + '/play.js');
-  forked.send(soundFile);
+  if (soundFileExists) {
+    const forked = fork(__dirname + '/play.js');
+    forked.send(soundFile);
+  }
 
   process.exit(val);
 });

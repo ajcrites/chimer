@@ -1,4 +1,12 @@
 {
+  "name": "chimer",
+  "version": "1.0.0",
+  "description": "Play sounds when commands are done",
+  "main": "index.js",
+  "bin": "./index.js",
+  "repository": "https://github.com/ajcrites/chimer",
+  "author": "Andrew Crites <ajcrites@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "minimist": "^1.2.0",
     "play-sound": "^1.1.2"
